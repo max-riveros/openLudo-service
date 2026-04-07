@@ -5,7 +5,7 @@
 module;
 
 #include <cstdint>
-#include <vector>
+#include <unordered_map>
 
 export module Field;
 
@@ -15,7 +15,7 @@ export class Field {
 protected:
     bool safe = false;
     uint8_t position = 0;
-    std::vector<Pawn> pawns;
+    std::unordered_map<uint8_t, Pawn, PawnHash> pawns;
 public:
     virtual ~Field() = default;
 
@@ -25,7 +25,7 @@ public:
     virtual uint8_t getPosition() {
         return position;
     }
-    virtual const std::vector<Pawn>& getPawns() {
+    virtual std::unordered_map<uint8_t, Pawn, PawnHash>& getPawns() {
         return pawns;
     }
 };

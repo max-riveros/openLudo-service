@@ -27,6 +27,9 @@ public:
     static Color blue() {
         return {0, 0, 255};
     }
+    static Color yellow() {
+        return {255, 255, 0};
+    }
     static Color white() {
         return {255, 255, 255};
     }
@@ -58,21 +61,32 @@ public:
         result += std::to_string(b) + ")";
         return result;
     }
+    bool operator==(const Color& other) const {
+        return this->r == other.r && this->g == other.g && this->b == other.b;
+    }
 };
 
 export class Pawn {
 protected:
-    uint8_t id = 0;
+    Color color = Color::white();
     bool dead = true;
     bool saved = false;
     bool inGoalArea = false;
-    Color color = Color::white();
+    uint8_t id = 0;
+    uint8_t position = 0;
+    uint8_t startPosition = 0;
 
 public:
     virtual ~Pawn() = default;
 
     virtual uint8_t getId() {
         return id;
+    }
+    virtual uint8_t getPosition() {
+        return position;
+    }
+    virtual uint8_t getStartPosition() {
+        return startPosition;
     }
     virtual bool isDead() {
         return dead;
@@ -85,7 +99,10 @@ public:
     }
     virtual const Color& getColor() {
         return color;
-    };
+    }
+    virtual void setPosition(uint8_t const value) {
+        position = value;
+    }
     virtual void setDead(bool const value) {
         dead = value;
     }
@@ -100,9 +117,8 @@ public:
     }
 };
 
-export template<>
-struct std::hash<Pawn> {
-    std::size_t operator()(Pawn& pawn) const noexcept {
-        return std::hash<uint8_t>()(pawn.getId());
+export struct PawnHash {
+    std::size_t operator()(const uint8_t key) const noexcept {
+        return std::hash<uint8_t>()(key);
     }
 };

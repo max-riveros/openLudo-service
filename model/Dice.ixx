@@ -25,6 +25,10 @@ public:
         lastRoll++;
         rollAccumulation += lastRoll;
     }
+    virtual void reset() {
+        lastRoll = 0;
+        rollAccumulation = 0;
+    }
     virtual void resetRollAccumulation() {
         rollAccumulation = 0;
     }

@@ -16,3 +16,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(model)
 add_subdirectory(controller)
+add_subdirectory(core)
