@@ -1,22 +1,26 @@
 #include <iostream>
 import DefaultPawn;
+import Dice;
 
-// TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+void rollDice(Dice& dice) {
+    dice.roll();
+    std::cout << "Dice roll: " << std::to_string(dice.getLastRoll()) << std::endl;
+}
 
 int main() {
-    // TIP Press <shortcut actionId="RenameElement"/> when your caret is at the <b>lang</b> variable name to see how CLion can help you rename it.
+    auto pawn = DefaultPawn(1, Color::red());
+    std::cout << "pawn " << std::to_string(pawn.getId()) << ": " << pawn.getColor().toPrettyString() << std::endl;
 
-    const auto lang = "C++";
-    std::cout << "Hello and welcome to " << lang << "!\n";
-
+    Dice dice;
     for (int i = 1; i <= 5; i++) {
-        // TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-        std::cout << "i = " << i << std::endl;
+        rollDice(dice);
     }
-
-    auto pawn = DefaultPawn(1);
-    std::cout << "pawn: " << std::to_string(pawn.getId()) << std::endl;
+    std::cout << "Dice total: " << std::to_string(dice.getRollAccumulation()) << std::endl;
+    dice.resetRollAccumulation();
+    for (int i = 1; i <= 5; i++) {
+        rollDice(dice);
+    }
+    std::cout << "Dice total: " << std::to_string(dice.getRollAccumulation()) << std::endl;
 
     return 0;
-    // TIP See CLion help at <a href="https://www.jetbrains.com/help/clion/">jetbrains.com/help/clion/</a>. Also, you can try interactive lessons for CLion by selecting 'Help | Learn IDE Features' from the main menu.
 }

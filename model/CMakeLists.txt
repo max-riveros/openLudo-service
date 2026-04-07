@@ -1,5 +1,4 @@
-add_library(model
-        Colors.cpp)
+add_library(model)
 
 target_sources(model
         PUBLIC FILE_SET model TYPE CXX_MODULES FILES
