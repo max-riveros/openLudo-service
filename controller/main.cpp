@@ -1,5 +1,6 @@
 #include <iostream>
-import DefaultPawn;
+import Pawn.Default;
+import Player.Default;
 import Dice;
 
 void rollDice(Dice& dice) {
@@ -7,10 +8,7 @@ void rollDice(Dice& dice) {
     std::cout << "Dice roll: " << std::to_string(dice.getLastRoll()) << std::endl;
 }
 
-int main() {
-    auto pawn = DefaultPawn(1, Color::red());
-    std::cout << "pawn " << std::to_string(pawn.getId()) << ": " << pawn.getColor().toPrettyString() << std::endl;
-
+void testDice() {
     Dice dice;
     for (int i = 1; i <= 5; i++) {
         rollDice(dice);
@@ -21,6 +19,27 @@ int main() {
         rollDice(dice);
     }
     std::cout << "Dice total: " << std::to_string(dice.getRollAccumulation()) << std::endl;
+}
+
+void testPawn() {
+    auto pawn = DefaultPawn(1, Color::red());
+    std::cout << "pawn " << std::to_string(pawn.getId()) << ": " << pawn.getColor().toPrettyString() << std::endl;
+}
+
+void testPlayer() {
+    Pawn pawns[4];
+    pawns[0] = static_cast<Pawn>(DefaultPawn(1, Color::red()));
+    pawns[1] = static_cast<Pawn>(DefaultPawn(2, Color::green()));
+    pawns[2] = static_cast<Pawn>(DefaultPawn(3, Color::blue()));
+    pawns[3] = static_cast<Pawn>(DefaultPawn(4, {255, 255, 0}));
+    auto player = DefaultPlayer("p1", pawns);
+    std::cout << "Player " << player.getId() << " has " << std::to_string(player.getPawns().size()) << " pawns." << std::endl;
+}
+
+int main() {
+    testPawn();
+    testPlayer();
+    testDice();
 
     return 0;
 }

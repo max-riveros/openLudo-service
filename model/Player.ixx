@@ -11,17 +11,17 @@ export module Player;
 export import Pawn;
 
 export class Player {
-private:
-    std::string name;
+protected:
+    std::string id;
     std::vector<Pawn> pawns;
 public:
     virtual ~Player() = default;
 
-    virtual const std::vector<Pawn>& getPaws() {
+    virtual const std::vector<Pawn>& getPawns() {
         return pawns;
     }
-    virtual const std::string& getName() {
-        return name;
+    virtual const std::string& getId() {
+        return id;
     }
     virtual const Color& getColor() {
         return pawns.front().getColor();

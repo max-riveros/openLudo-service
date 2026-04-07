@@ -7,5 +7,9 @@ target_sources(model
         Field.ixx
         Dice.ixx
         Player.ixx
-        impl/DefaultPawn.cpp
+        impl/DefaultPawn.ixx
+        impl/DefaultDice.ixx
+        impl/DefaultBoard.ixx
+        impl/DefaultField.ixx
+        impl/DefaultPlayer.ixx
 )

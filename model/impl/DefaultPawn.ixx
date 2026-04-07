@@ -5,7 +5,7 @@
 module;
 #include <cstdint>
 
-export module DefaultPawn;
+export module Pawn.Default;
 
 export import Pawn;
 

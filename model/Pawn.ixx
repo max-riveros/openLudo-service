@@ -95,4 +95,14 @@ public:
     virtual void setInGoalArea(bool const value) {
         inGoalArea = value;
     }
+    virtual bool operator==(Pawn const& other) const {
+        return this->id == other.id;
+    }
+};
+
+export template<>
+struct std::hash<Pawn> {
+    std::size_t operator()(Pawn& pawn) const noexcept {
+        return std::hash<uint8_t>()(pawn.getId());
+    }
 };
