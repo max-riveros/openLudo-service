@@ -18,11 +18,25 @@ protected:
 public:
     virtual ~Pawn() = default;
 
-    virtual uint8_t getId() = 0;
-    virtual bool isDead() = 0;
-    virtual bool isSaved() = 0;
-    virtual bool isInGoalArea() = 0;
-    virtual void setDead(bool value) = 0;
-    virtual void setSaved(bool value) = 0;
-    virtual void setInGoalArea(bool value) = 0;
+    virtual uint8_t getId() {
+        return id;
+    };
+    virtual bool isDead() {
+        return dead;
+    };
+    virtual bool isSaved() {
+        return saved;
+    };
+    virtual bool isInGoalArea() {
+        return inGoalArea;
+    };
+    virtual void setDead(bool const value) {
+        dead = value;
+    };
+    virtual void setSaved(bool const value) {
+        saved = value;
+    };
+    virtual void setInGoalArea(bool const value) {
+        inGoalArea = value;
+    };
 };

@@ -1,4 +1,5 @@
-add_library(model)
+add_library(model
+        Colors.cpp)
 
 target_sources(model
         PUBLIC FILE_SET model TYPE CXX_MODULES FILES
@@ -7,5 +8,5 @@ target_sources(model
         Field.ixx
         Dice.ixx
         Player.ixx
-        impl/DefaultPawn.ixx
+        impl/DefaultPawn.cpp
 )

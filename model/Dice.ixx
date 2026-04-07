@@ -3,3 +3,7 @@
 //
 
 export module Dice;
+
+export class Dice {
+    
+};
