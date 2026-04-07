@@ -83,7 +83,7 @@ public:
     virtual bool isInGoalArea() {
         return inGoalArea;
     }
-    virtual Color& getColor() {
+    virtual const Color& getColor() {
         return color;
     };
     virtual void setDead(bool const value) {
