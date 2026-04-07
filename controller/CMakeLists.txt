@@ -1,7 +1,7 @@
 add_library(controller)
 
 target_sources(controller
-        PUBLIC FILE_SET model TYPE CXX_MODULES FILES
+        PUBLIC FILE_SET controller TYPE CXX_MODULES FILES
         Game.ixx
         impl/DefaultGame.ixx
 )
