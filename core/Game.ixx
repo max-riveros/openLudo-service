@@ -112,12 +112,18 @@ public:
             if (pawn.getId() == id) {
                 if (!isSelectionValid(pawn)) throw std::logic_error("Invalid selection!");
                 selectedPawn = id;
-                ui->onSelected();
+                ui->onSelected(pawn);
                 doTurn();
                 return;
             }
         }
         throw std::logic_error("Pawn does not exist");
+    }
+    virtual void skipPlayer() {
+        ui->onPlayerSkipped();
+        dice.reset();
+        turnsLeft = 0;
+        cycle();
     }
     virtual void rollDice() {
         if (dice.getLastRoll() == 0) {
@@ -125,17 +131,13 @@ public:
             ui->onDiceRolled();
             if (!getPossiblePawns().empty()) {
                 ui->onWaitingForSelect();
+            } else {
+                skipPlayer();
             }
             return;
         }
 
         throw std::logic_error("Dice was already thrown. Please select a pawn.");
-    }
-    virtual void skipPlayer() {
-        ui->onPlayerSkipped();
-        dice.reset();
-        turnsLeft = 0;
-        cycle();
     }
     virtual void start() {
         ui->onGameStart();

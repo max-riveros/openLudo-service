@@ -20,7 +20,7 @@ public:
     virtual void onWaitingForDice() = 0;
     virtual void onDiceRolled() = 0;
     virtual void onWaitingForSelect() = 0;
-    virtual void onSelected() = 0;
+    virtual void onSelected(const Pawn& pawn) = 0;
     virtual void onPlayerSkipped() = 0;
     virtual void onPlayerTurn(const Player& player) = 0;
 
