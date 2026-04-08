@@ -11,7 +11,7 @@ export import Field;
 
 export class DefaultField : public Field {
 public:
-    DefaultField() = default;
+    DefaultField() : Field() {}
     explicit DefaultField(uint8_t const position) {
         this->position = position;
     }

@@ -14,7 +14,7 @@ export import Field.Default;
 
 export class DefaultBoard : public Board {
 private:
-    static constexpr std::uint8_t size = 24;
+    static constexpr std::uint8_t size = 52;
     DefaultField fields[size] = {};
 public:
     explicit DefaultBoard() {

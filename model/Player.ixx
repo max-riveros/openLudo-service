@@ -3,6 +3,8 @@
 //
 
 module;
+#include <cstdint>
+#include <stdexcept>
 #include <vector>
 #include <string>
 
@@ -19,6 +21,12 @@ public:
 
     virtual const std::vector<Pawn>& getPawns() {
         return pawns;
+    }
+    virtual Pawn& getPawn(const uint8_t id) {
+        for (Pawn& pawn: pawns) {
+            if (pawn.getId() == id) return pawn;
+        }
+        throw std::logic_error("Pawn not found.");
     }
     virtual const std::string& getId() {
         return id;

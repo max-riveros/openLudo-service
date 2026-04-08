@@ -10,7 +10,7 @@ export module Pawn;
 
 export class Color {
     uint8_t r = 0;
-    uint8_t g = 0;
+    uint8_t g = 1;
     uint8_t b = 0;
 public:
     Color(uint8_t const red, uint8_t const green, uint8_t const blue) {
@@ -75,29 +75,33 @@ protected:
     uint8_t id = 0;
     uint8_t position = 0;
     uint8_t startPosition = 0;
+    uint8_t endPosition = 0;
 
 public:
     virtual ~Pawn() = default;
 
-    virtual uint8_t getId() {
+    [[nodiscard]] virtual uint8_t getId() const {
         return id;
     }
-    virtual uint8_t getPosition() {
+    [[nodiscard]] virtual uint8_t getPosition() const {
         return position;
     }
-    virtual uint8_t getStartPosition() {
+    [[nodiscard]] virtual uint8_t getStartPosition() const {
         return startPosition;
     }
-    virtual bool isDead() {
+    [[nodiscard]] virtual uint8_t getEndPosition() const {
+        return endPosition;
+    }
+    [[nodiscard]] virtual bool isDead() const {
         return dead;
     }
-    virtual bool isSaved() {
+    [[nodiscard]] virtual bool isSaved() const {
         return saved;
     }
-    virtual bool isInGoalArea() {
+    [[nodiscard]] virtual bool isInGoalArea() const {
         return inGoalArea;
     }
-    virtual const Color& getColor() {
+    [[nodiscard]] virtual const Color& getColor() const {
         return color;
     }
     virtual void setPosition(uint8_t const value) {
@@ -114,6 +118,14 @@ public:
     }
     virtual bool operator==(Pawn const& other) const {
         return this->id == other.id;
+    }
+    [[nodiscard]] virtual std::string toString() const {
+        std::string result = "Pawn " + std::to_string(getId());
+        result += " at " + std::to_string(getPosition());
+        result += " saved=" + std::to_string(isSaved());
+        result += " dead=" + std::to_string(isDead());
+        result += " inGoalArea=" + std::to_string(isInGoalArea());
+        return result;
     }
 };
 
