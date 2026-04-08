@@ -1,3 +1,9 @@
-add_executable(openLudo main.cpp)
+add_library(core)
 
-target_link_libraries(openLudo PRIVATE model controller)
+target_sources(core
+        PUBLIC FILE_SET core TYPE CXX_MODULES FILES
+        Game.ixx
+        impl/DefaultGame.ixx
+)
+
+target_link_libraries(core PRIVATE model)
