@@ -17,6 +17,7 @@ private:
     DefaultGame* game = nullptr;
 
     static uint8_t selectPawn(std::vector<Pawn>& moves) {
+        if (moves.size() == 1) return 0;
         std::cout << "  Please select a pawn (1-" << moves.size() << "):" << std::endl;
         for (int i = 0; i < moves.size(); i++) {
             auto pawn = moves[i];
@@ -48,7 +49,7 @@ public:
         for (uint8_t i = 0; i < playerCount; i++) {
             pids[i] = "player_" + std::to_string(i+1);
         }
-        const auto eventListener = TuiEventListener();
+        const auto eventListener = new TuiEventListener();
         game = new DefaultGame(pids, playerCount, eventListener);
     }
 
@@ -76,8 +77,8 @@ public:
                 auto& pawn = moves[selectPawn(moves)];
                 game->selectPawn(pawn.getId());
                 std::cout << "  Pawn " << std::to_string(pawn.getId()) << " selected." << std::endl;
-
                 game->doTurn();
+                if (game->hasPlayerWon()) return;
             }
 
             std::cout << "End game? (y/N) ";

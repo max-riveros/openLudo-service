@@ -10,20 +10,20 @@ module;
 
 export module Game;
 
+import EventListener;
 import Dice;
 import Player;
-import EventListener;
 
 export class Game {
 protected:
-    EventListener eventListener;
+    EventListener *eventListener;
     Dice dice;
     std::vector<Player> players;
     uint8_t currentTurn = 0;
     uint8_t turnsLeft = 1;
     uint8_t selectedPawn = 0;
 
-    explicit Game(const EventListener& eventListener) {
+    explicit Game(EventListener* eventListener) {
         this->eventListener = eventListener;
     }
 
@@ -82,6 +82,12 @@ public:
         }
         return result;
     }
+    virtual bool hasPlayerWon() {
+        for (const Pawn& pawn : getTurn().getPawns()) {
+            if (!pawn.isSaved()) return false;
+        }
+        return true;
+    }
     virtual bool hasMove() {
         for (const Pawn& pawn : getTurn().getPawns()) {
             if (isSelectionValid(pawn)) return true;
@@ -117,6 +123,7 @@ public:
             dice.reset();
             selectedPawn = 0; // Deselect
             cycle();
+            return;
         }
 
         throw std::logic_error("Please select the pawn you want to move.");

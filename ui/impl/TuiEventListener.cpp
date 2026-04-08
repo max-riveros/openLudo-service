@@ -11,6 +11,7 @@ export module EventListener.TUI;
 import Pawn;
 import Field;
 export import EventListener;
+import Player;
 
 export class TuiEventListener : public EventListener {
 public:
@@ -31,5 +32,8 @@ public:
     void onPawnMoved(const Pawn& pawn, const Field& from, const Field& to) override {
         std::cout << "Pawn " << std::to_string(pawn.getId()) << " moved from "
             << std::to_string(from.getPosition()) << " to " << std::to_string(to.getPosition()) << "!" << std::endl;
+    }
+    void onGameOver(const Player& player) override {
+        std::cout << "Game Over! " << player.getId() << " saved all pawns!" << std::endl;
     }
 };

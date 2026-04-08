@@ -3,6 +3,7 @@
 //
 
 module;
+
 #include <cstdint>
 #include <stdexcept>
 #include <vector>
@@ -28,10 +29,10 @@ public:
         }
         throw std::logic_error("Pawn not found.");
     }
-    virtual const std::string& getId() {
+    [[nodiscard]] virtual const std::string& getId() const {
         return id;
     }
-    virtual const Color& getColor() {
+    [[nodiscard]] virtual const Color& getColor() const {
         return pawns.front().getColor();
     }
 };

@@ -35,10 +35,11 @@ private:
             if (targetPosition == goalAreaSize) {
                 pawn.setSaved(true);
                 turnsLeft++;
-                eventListener.onPawnSaved(pawn);
+                eventListener->onPawnSaved(pawn);
+                if (hasPlayerWon()) eventListener->onGameOver(getTurn());
             } else {
                 pawn.setPosition(targetPosition);
-                eventListener.onPawnMovedToGoalArea(pawn);
+                eventListener->onPawnMovedToGoalArea(pawn);
             }
             return true;
         }
@@ -73,7 +74,7 @@ protected:
 
         if (pawn.isDead()) {
             board.revive(pawn);
-            eventListener.onPawnRevived(pawn);
+            eventListener->onPawnRevived(pawn);
             return;
         }
 
@@ -82,17 +83,17 @@ protected:
         targetPosition = pawn.getPosition() + dice.getLastRoll();
         targetPosition %= board.getSize();
 
-        eventListener.onPawnMoved(pawn, board.getField(pawn.getPosition()), board.getField(targetPosition));
+        eventListener->onPawnMoved(pawn, board.getField(pawn.getPosition()), board.getField(targetPosition));
         Pawn* killed = checkMurder(pawn, targetPosition);
         if (killed != nullptr) {
-            eventListener.onPawnKilled(pawn, *killed);
+            eventListener->onPawnKilled(pawn, *killed);
         }
 
         board.move(pawn, targetPosition);
     }
 
 public:
-    explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount, const EventListener& eventListener) : Game(eventListener) {
+    explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount, EventListener* eventListener) : Game(eventListener) {
         int lastId = 0;
         Pawn pawns[4];
         for (int i = 0; i < playerCount; i++) {
@@ -111,5 +112,4 @@ public:
             players.push_back(player);
         }
     }
-
 };
