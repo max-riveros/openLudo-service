@@ -14,6 +14,7 @@ import Board.Default;
 import Game;
 import Player.Default;
 import Pawn.Default;
+import EventListener;
 
 const Color colors[4] = {Color::red(), Color::green(), Color::blue(), Color::yellow()};
 export class DefaultGame : public Game {
@@ -31,29 +32,33 @@ private:
         }
 
         if (pawn.isInGoalArea()) {
-            pawn.setPosition(targetPosition);
             if (targetPosition == goalAreaSize) {
                 pawn.setSaved(true);
                 turnsLeft++;
+                eventListener.onPawnSaved(pawn);
+            } else {
+                pawn.setPosition(targetPosition);
+                eventListener.onPawnMovedToGoalArea(pawn);
             }
             return true;
         }
         return false;
     }
-    bool checkMurder(const Pawn& pawn, const uint8_t targetPosition) {
+    Pawn* checkMurder(const Pawn& pawn, const uint8_t targetPosition) {
         Field& target = board.getField(targetPosition);
         if (!target.isSafe()) {
             auto& pawns = target.getPawns();
             if (pawns.size() != 1) {
-                return false;
+                return nullptr;
             }
             Pawn* other = pawns.front();
             if (other->getColor() != pawn.getColor()) {
                 board.kill(*other);
                 turnsLeft++;
+                return other;
             }
         }
-        return true;
+        return nullptr;
     }
 
 protected:
@@ -61,34 +66,33 @@ protected:
         return targetPosition > goalAreaSize;
     }
 
-    uint8_t move() override {
+    void move() override {
         if (dice.getLastRoll() == 6) turnsLeft++;
 
         Pawn& pawn = getSelectedPawn();
 
         if (pawn.isDead()) {
             board.revive(pawn);
-            return 1;
+            eventListener.onPawnRevived(pawn);
+            return;
         }
 
         uint8_t targetPosition = pawn.getPosition() + dice.getLastRoll();
-        if (checkGoalZone(pawn, targetPosition)) {
-            if (pawn.isSaved()) return 2;
-            return 3;
-        }
+        if (checkGoalZone(pawn, targetPosition)) return;
         targetPosition = pawn.getPosition() + dice.getLastRoll();
         targetPosition %= board.getSize();
-        if (checkMurder(pawn, targetPosition)) {
-            board.move(pawn, targetPosition);
-            return 4;
+
+        eventListener.onPawnMoved(pawn, board.getField(pawn.getPosition()), board.getField(targetPosition));
+        Pawn* killed = checkMurder(pawn, targetPosition);
+        if (killed != nullptr) {
+            eventListener.onPawnKilled(pawn, *killed);
         }
 
         board.move(pawn, targetPosition);
-        return 0;
     }
 
 public:
-    explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount) {
+    explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount, const EventListener& eventListener) : Game(eventListener) {
         int lastId = 0;
         Pawn pawns[4];
         for (int i = 0; i < playerCount; i++) {

@@ -9,6 +9,8 @@ export module UserInterface;
 
 import Game.Default;
 import Player.Default;
+import EventListener.TUI;
+import Game;
 
 export class UserInterface {
 private:
@@ -34,7 +36,7 @@ private:
     }
 public:
     ~UserInterface() {
-        delete game;
+        if (game == nullptr) delete game;
     }
 
     void init() {
@@ -46,10 +48,11 @@ public:
         for (uint8_t i = 0; i < playerCount; i++) {
             pids[i] = "player_" + std::to_string(i+1);
         }
-        game = new DefaultGame(pids, playerCount);
+        const auto eventListener = TuiEventListener();
+        game = new DefaultGame(pids, playerCount, eventListener);
     }
 
-    void run() {
+    void run() const {
         std::cout << "Running..." << std::endl;
 
         while (true) {
@@ -74,20 +77,7 @@ public:
                 game->selectPawn(pawn.getId());
                 std::cout << "  Pawn " << std::to_string(pawn.getId()) << " selected." << std::endl;
 
-                std::string message;
-                switch (game->doTurn()) {
-                    case 1:
-                        message = "Revived pawn!";
-                        break;
-                    case 2:
-                        message = "Saved pawn!";
-                        break;
-                    case 4:
-                        message = "Killed pawn!";
-                        break;
-                    default: message = "Moved pawn!";
-                }
-                std::cout << "  " << message << std::endl;
+                game->doTurn();
             }
 
             std::cout << "End game? (y/N) ";

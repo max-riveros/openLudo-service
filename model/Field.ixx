@@ -5,7 +5,6 @@
 module;
 
 #include <cstdint>
-#include <memory>
 #include <stdexcept>
 #include <vector>
 
@@ -29,16 +28,16 @@ public:
     Field(Field&&) = default;
     Field& operator=(Field&&) = default;
 
-    virtual bool isSafe() {
+    [[nodiscard]] virtual bool isSafe() const {
         return safe;
     }
-    virtual uint8_t getPosition() {
+    [[nodiscard]] virtual uint8_t getPosition() const {
         return position;
     }
-    virtual const std::vector<Pawn*>& getPawns() {
+    [[nodiscard]] virtual const std::vector<Pawn*>& getPawns() const {
         return pawns;
     }
-    virtual Pawn& getPawn(const uint8_t id) {
+    [[nodiscard]] virtual Pawn& getPawn(const uint8_t id) const {
         for (const auto& pawn : pawns) {
             if (pawn->getId() == id) return *pawn;
         }

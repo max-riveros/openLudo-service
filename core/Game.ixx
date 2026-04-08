@@ -12,14 +12,20 @@ export module Game;
 
 import Dice;
 import Player;
+import EventListener;
 
 export class Game {
 protected:
+    EventListener eventListener;
     Dice dice;
     std::vector<Player> players;
     uint8_t currentTurn = 0;
     uint8_t turnsLeft = 1;
     uint8_t selectedPawn = 0;
+
+    explicit Game(const EventListener& eventListener) {
+        this->eventListener = eventListener;
+    }
 
     virtual bool isTargetOutsideGoalArea(uint8_t targetPosition) = 0;
     virtual bool isTargetPastEnd(const Pawn& pawn) {
@@ -39,7 +45,7 @@ protected:
         return true;
     }
 
-    virtual uint8_t move() = 0;
+    virtual void move() = 0;
     virtual void cycle() {
         if (turnsLeft != 0) {
             turnsLeft--;
@@ -105,13 +111,12 @@ public:
         turnsLeft = 0;
         cycle();
     }
-    virtual uint8_t doTurn() {
+    virtual void doTurn() {
         if (!isWaitingForSelection()) {
-            const uint8_t result = move();
+            move();
             dice.reset();
             selectedPawn = 0; // Deselect
             cycle();
-            return result;
         }
 
         throw std::logic_error("Please select the pawn you want to move.");
