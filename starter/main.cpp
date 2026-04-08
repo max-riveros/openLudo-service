@@ -1,7 +1,7 @@
 import UserInterface;
 
 int main() {
-    UserInterface ui;
+    TUI ui;
     ui.init();
     ui.run();
     return 0;

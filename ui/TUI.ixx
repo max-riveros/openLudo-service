@@ -12,7 +12,7 @@ import Player.Default;
 import EventListener.TUI;
 import Game;
 
-export class UserInterface {
+export class TUI {
 private:
     DefaultGame* game = nullptr;
 
@@ -35,7 +35,7 @@ private:
         return pawnNumber;
     }
 public:
-    ~UserInterface() {
+    ~TUI() {
         if (game == nullptr) delete game;
     }
 
