@@ -14,7 +14,7 @@ import Board.Default;
 import Game;
 import Player.Default;
 import Pawn.Default;
-import EventListener;
+import UI;
 
 const Color colors[4] = {Color::red(), Color::green(), Color::blue(), Color::yellow()};
 export class DefaultGame : public Game {
@@ -35,11 +35,13 @@ private:
             if (targetPosition == goalAreaSize) {
                 pawn.setSaved(true);
                 turnsLeft++;
-                eventListener->onPawnSaved(pawn);
-                if (hasPlayerWon()) eventListener->onGameOver(getTurn());
+                ui->onPawnSaved(pawn);
+                if (hasPlayerWon()) {
+                    ui->onGameOver(getTurn());
+                }
             } else {
                 pawn.setPosition(targetPosition);
-                eventListener->onPawnMovedToGoalArea(pawn);
+                ui->onPawnMovedToGoalArea(pawn);
             }
             return true;
         }
@@ -74,7 +76,7 @@ protected:
 
         if (pawn.isDead()) {
             board.revive(pawn);
-            eventListener->onPawnRevived(pawn);
+            ui->onPawnRevived(pawn);
             return;
         }
 
@@ -83,17 +85,17 @@ protected:
         targetPosition = pawn.getPosition() + dice.getLastRoll();
         targetPosition %= board.getSize();
 
-        eventListener->onPawnMoved(pawn, board.getField(pawn.getPosition()), board.getField(targetPosition));
+        ui->onPawnMoved(pawn, board.getField(pawn.getPosition()), board.getField(targetPosition));
         Pawn* killed = checkMurder(pawn, targetPosition);
         if (killed != nullptr) {
-            eventListener->onPawnKilled(pawn, *killed);
+            ui->onPawnKilled(pawn, *killed);
         }
 
         board.move(pawn, targetPosition);
     }
 
 public:
-    explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount, EventListener* eventListener) : Game(eventListener) {
+    explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount, UI* ui) : Game(ui) {
         int lastId = 0;
         Pawn pawns[4];
         for (int i = 0; i < playerCount; i++) {

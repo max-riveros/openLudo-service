@@ -10,21 +10,21 @@ module;
 
 export module Game;
 
-import EventListener;
+import UI;
 import Dice;
 import Player;
 
 export class Game {
 protected:
-    EventListener *eventListener;
+    UI *ui;
     Dice dice;
     std::vector<Player> players;
     uint8_t currentTurn = 0;
     uint8_t turnsLeft = 1;
     uint8_t selectedPawn = 0;
 
-    explicit Game(EventListener* eventListener) {
-        this->eventListener = eventListener;
+    explicit Game(UI* ui) {
+        this->ui = ui;
     }
 
     virtual bool isTargetOutsideGoalArea(uint8_t targetPosition) = 0;
@@ -49,10 +49,12 @@ protected:
     virtual void cycle() {
         if (turnsLeft != 0) {
             turnsLeft--;
-            return;
+        } else {
+            currentTurn++;
+            currentTurn %= players.size();
+            ui->onPlayerTurn(getTurn());
         }
-        currentTurn++;
-        currentTurn = currentTurn % players.size();
+        ui->onWaitingForDice();
     }
 public:
     virtual ~Game() = default;
@@ -94,29 +96,6 @@ public:
         }
         return false;
     }
-    virtual void selectPawn(const uint8_t id) {
-        for (const Pawn& pawn : getTurn().getPawns()) {
-            if (pawn.getId() == id) {
-                if (!isSelectionValid(pawn)) throw std::logic_error("Invalid selection!");
-                selectedPawn = id;
-                return;
-            }
-        }
-        throw std::logic_error("Pawn does not exist");
-    }
-    virtual void throwDice() {
-        if (dice.getLastRoll() == 0) {
-            dice.roll();
-            return;
-        }
-
-        throw std::logic_error("Dice was already thrown. Please select a pawn.");
-    }
-    virtual void skipPlayer() {
-        dice.reset();
-        turnsLeft = 0;
-        cycle();
-    }
     virtual void doTurn() {
         if (!isWaitingForSelection()) {
             move();
@@ -127,5 +106,40 @@ public:
         }
 
         throw std::logic_error("Please select the pawn you want to move.");
+    }
+    virtual void selectPawn(const uint8_t id) {
+        for (const Pawn& pawn : getTurn().getPawns()) {
+            if (pawn.getId() == id) {
+                if (!isSelectionValid(pawn)) throw std::logic_error("Invalid selection!");
+                selectedPawn = id;
+                ui->onSelected();
+                doTurn();
+                return;
+            }
+        }
+        throw std::logic_error("Pawn does not exist");
+    }
+    virtual void throwDice() {
+        if (dice.getLastRoll() == 0) {
+            dice.roll();
+            ui->onDiceRolled();
+            if (!getPossiblePawns().empty()) {
+                ui->onWaitingForSelect();
+            }
+            return;
+        }
+
+        throw std::logic_error("Dice was already thrown. Please select a pawn.");
+    }
+    virtual void skipPlayer() {
+        ui->onPlayerSkipped();
+        dice.reset();
+        turnsLeft = 0;
+        cycle();
+    }
+    virtual void start() {
+        ui->onGameStart();
+        ui->onPlayerTurn(getTurn());
+        ui->onWaitingForDice();
     }
 };

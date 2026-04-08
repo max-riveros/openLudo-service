@@ -1,9 +1,18 @@
+add_library(ui_if)
+
+target_sources(ui_if
+        PUBLIC FILE_SET ui_if TYPE CXX_MODULES FILES
+        UI.ixx
+)
+
+target_link_libraries(ui_if PRIVATE model)
+
+
 add_library(ui)
 
 target_sources(ui
         PUBLIC FILE_SET ui TYPE CXX_MODULES FILES
-        TUI.ixx
-        impl/TuiEventListener.cpp
+        impl/TUI.ixx
 )
 
-target_link_libraries(ui PRIVATE core)
+target_link_libraries(ui PRIVATE core model)
