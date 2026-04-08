@@ -119,7 +119,7 @@ public:
         }
         throw std::logic_error("Pawn does not exist");
     }
-    virtual void throwDice() {
+    virtual void rollDice() {
         if (dice.getLastRoll() == 0) {
             dice.roll();
             ui->onDiceRolled();
