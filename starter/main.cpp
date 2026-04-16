@@ -1,8 +1,8 @@
 import UI.Terminal;
+import UI.Network;
 
 int main() {
-    TUI ui;
-    ui.init();
+    NetworkUI ui;
     ui.start();
     return 0;
 }

@@ -16,12 +16,12 @@ export class UI {
 public:
     virtual ~UI() = default;
 
-    virtual void start() const = 0;
+    virtual void start() = 0;
 
     virtual void onGameStart() = 0;
     virtual void onPlayerTurn(const Player& player) = 0;
     virtual void onWaitingForDice() = 0;
-    virtual void onDiceRolled(const uint8_t value) = 0;
+    virtual void onDiceRolled(uint8_t value) = 0;
     virtual void onWaitingForSelect() = 0;
     virtual void onSelected(const Pawn& pawn) = 0;
     virtual void onPlayerSkipped() = 0;

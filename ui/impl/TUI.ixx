@@ -60,7 +60,7 @@ public:
         game = new DefaultGame(pids, playerCount, this);
     }
 
-    void start() const override {
+    void start() override {
         game->start();
     }
 
