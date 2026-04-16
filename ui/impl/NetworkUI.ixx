@@ -27,7 +27,7 @@ private:
         bindingAddress.sin_port = htons(port);
         bindingAddress.sin_addr.s_addr = ip;
         bind(serverSocket, reinterpret_cast<sockaddr *>(&bindingAddress), sizeof(bindingAddress));
-        std::println("Bound socket {} to address {}:{}!", serverSocket, ip, port);
+        std::println("Binding to address {}:{} at socket {}!", std::to_string(ip), port, serverSocket);
     }
 
     void handleMessage(int clientSocket, const char buffer[INPUT_BUFFER_SIZE]) {
@@ -36,7 +36,7 @@ private:
     }
 
     void listenClients() {
-        std::println("Listening for clients...");
+        std::println("Listening...");
         while (listening) {
             char buffer[1024] = {};
             recv(clientSockets[0], buffer, sizeof(buffer), 0);
@@ -49,7 +49,7 @@ public:
 
     explicit NetworkUI() : NetworkUI(INADDR_ANY, DEFAULT_PORT) {}
     explicit NetworkUI(const in_addr_t ip, const in_port_t port) {
-        serverSocket = socket(AF_INET, SOCK_DGRAM, 0);
+        serverSocket = socket(AF_INET, SOCK_STREAM, 0);
         bindTo(serverSocket, ip, port);
     }
 
@@ -61,7 +61,17 @@ public:
     void start() /*override*/ {
         std::println("Starting server...");
         listen(serverSocket, MAX_CLIENTS);
-        clientSockets[0] = accept(serverSocket, nullptr, nullptr);
+
+        sockaddr_in clientAddress{};
+        socklen_t clientAddressLength = sizeof(clientAddress);
+        clientSockets[0] = accept(serverSocket, reinterpret_cast<sockaddr *>(&clientAddress), &clientAddressLength);
+
+        if (clientSockets[0] < 0) {
+            std::perror("Accept failed");
+            throw std::runtime_error("Failed to start the server");
+        }
+        std::println("Client {}:{} connected!", std::to_string(clientAddress.sin_addr.s_addr), clientAddress.sin_port);
+
         listening = true;
         listenClients();
     }
