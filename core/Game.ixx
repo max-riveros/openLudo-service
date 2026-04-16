@@ -128,7 +128,7 @@ public:
     virtual void rollDice() {
         if (dice.getLastRoll() == 0) {
             dice.roll();
-            ui->onDiceRolled();
+            ui->onDiceRolled(dice.getLastRoll());
             if (!getPossiblePawns().empty()) {
                 ui->onWaitingForSelect();
             } else {

@@ -85,8 +85,8 @@ public:
         std::cin.getline(ignored, 1);
         game->rollDice();
     }
-    void onDiceRolled() override {
-        std::println("  Rolled a {}!", game->getLastDiceRoll());
+    void onDiceRolled(uint8_t value) override {
+        std::println("  Rolled a {}!", value);
     }
     void onWaitingForSelect() override {
         const auto moves = game->getPossiblePawns();

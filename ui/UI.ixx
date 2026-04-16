@@ -4,6 +4,8 @@
 
 module;
 
+#include <cstdint>
+
 export module UI;
 
 export import Pawn;
@@ -17,13 +19,13 @@ public:
     virtual void start() const = 0;
 
     virtual void onGameStart() = 0;
+    virtual void onPlayerTurn(const Player& player) = 0;
     virtual void onWaitingForDice() = 0;
-    virtual void onDiceRolled() = 0;
+    virtual void onDiceRolled(const uint8_t value) = 0;
     virtual void onWaitingForSelect() = 0;
     virtual void onSelected(const Pawn& pawn) = 0;
     virtual void onPlayerSkipped() = 0;
-    virtual void onPlayerTurn(const Player& player) = 0;
-
+    
     virtual void onPawnKilled(const Pawn& killer, const Pawn& killed) = 0;
     virtual void onPawnRevived(const Pawn& pawn) = 0;
     virtual void onPawnSaved(const Pawn& pawn) = 0;
