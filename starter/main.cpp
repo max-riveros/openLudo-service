@@ -1,8 +1,7 @@
-import UI.Terminal;
-import UI.Network;
+import UI.GameServer;
 
 int main() {
-    NetworkUI ui;
+    GameServer ui;
     ui.start();
     return 0;
 }
