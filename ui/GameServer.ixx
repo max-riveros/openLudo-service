@@ -74,14 +74,12 @@ public:
         return game;
     }
     void initGame() override {
-        std::string playerIds[getPlayerCount()];
-        uint8_t playerIndex = 1;
+        std::map<std::string, Color> players;
         for (const Client& client : clients) {
             if (client.clientId <= 0) continue;
-            playerIds[playerIndex] = std::to_string(client.clientId);
-            playerIndex++;
+            players[std::to_string(client.clientId)] = client.color;
         }
-        game = new DefaultGame(playerIds, getPlayerCount(), this);
+        game = new DefaultGame(players, this);
     }
     int getPlayerCount() const override {
         return playerCount;

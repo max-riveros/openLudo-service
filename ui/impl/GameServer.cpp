@@ -185,7 +185,17 @@ void GameServer::addCommands() {
 }
 
 void GameServer::onGameStart() {
-    const std::string message = "event=gameStart;players="+playerCount;
+    for (const Player& player : getGame()->getPlayers()) {
+        std::string message = "event=playerSetup";
+        message += ";id="+player.getId();
+        message += ";color="+std::to_string(player.getColor());
+        message += ";pawns=";
+        for (const Pawn& pawn : player.getPawns()) {
+            message += std::to_string(pawn.getId()) + ",";
+        }
+        broadcast(message);
+    }
+    const std::string message = "event=gameStart;playerCount="+playerCount;
     broadcast(message);
 }
 void GameServer::onPlayerTurn(const Player& player) {

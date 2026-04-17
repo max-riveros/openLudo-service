@@ -20,7 +20,7 @@ protected:
 public:
     virtual ~Player() = default;
 
-    virtual const std::vector<Pawn>& getPawns() {
+    [[nodiscard]] virtual const std::vector<Pawn>& getPawns() const {
         return pawns;
     }
     virtual Pawn& getPawn(const uint8_t id) {

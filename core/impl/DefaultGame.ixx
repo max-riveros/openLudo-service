@@ -7,6 +7,8 @@ module;
 #include <cstdint>
 #include <stdexcept>
 #include <string>
+#include <map>
+#include <ranges>
 
 export module Game.Default;
 
@@ -95,6 +97,25 @@ protected:
     }
 
 public:
+    explicit DefaultGame(const std::map<std::string, Color>& players, UI* ui) : Game(ui) {
+        int playerCounter = 0;
+        for (const auto [key, value] : players) {
+            Pawn pawns[4];
+            for (int pawn = 0; pawn < 4; pawn++) {
+                const uint8_t startPosition = 13 * value; // Use int value of enum
+                int16_t endPosition = startPosition + goalAreaEntryOffset;
+                endPosition %= board.getSize();
+                if (endPosition < 0) {
+                    endPosition = board.getSize() + endPosition;
+                }
+                const uint8_t pawnId = playerCounter*4 + pawn;
+                pawns[pawn] = static_cast<Pawn>(DefaultPawn(pawnId, value, startPosition, endPosition));
+            }
+            auto player = static_cast<Player>(DefaultPlayer(key, pawns));
+            this->players.push_back(player);
+            playerCounter++;
+        }
+    }
     explicit DefaultGame(const std::string* playerIds, const uint8_t playerCount, UI* ui) : Game(ui) {
         int lastId = 0;
         Pawn pawns[4];

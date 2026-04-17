@@ -33,6 +33,10 @@ public:
         char* token = new char[6];
         std::strcpy(token, "00000");
         client.token = token;
+        std::string message = "event=registered;token="+std::string(token);
+        message += ";playerId="+std::to_string(clientId);
+        message += ";color="+std::to_string(client.color);
+        client.sendMessage(message);
 
         std::println("registered client ({})!", client.token);
     }
