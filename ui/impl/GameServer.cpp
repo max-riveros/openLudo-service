@@ -61,7 +61,7 @@ std::map<std::string, std::string> parse(const std::string& input) {
 }
 
 void GameServer::broadcast(const std::string message) {
-    for (const Client& client : clients) {
+    for (Client& client : clients) {
         client.sendMessage(message);
     }
 }

@@ -29,9 +29,18 @@ export struct Client {
     }
     void sendMessage(const std::string& message) {
         if (socket == -1) return;
-        if (send(socket, message.c_str(), message.length(), 0) <= 1) {
-            close(socket);
-            socket = -1;
+
+        size_t total = 0;
+        const size_t len = message.length();
+
+        while (total < len) {
+            const size_t substrSize = len - total;
+            const size_t sent = send(socket, message.substr(total, substrSize).c_str(), substrSize, 0);
+            if (sent <= 0) {
+                close(socket);
+                socket = -1;
+            }
+            total += sent;
         }
     }
 };
