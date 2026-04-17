@@ -16,7 +16,7 @@ import Player.Default;
 import Pawn.Default;
 import UI;
 
-const Color colors[4] = {Color::red(), Color::green(), Color::blue(), Color::yellow()};
+constexpr Color colors[4] = {RED, BLUE, YELLOW, GREEN};
 export class DefaultGame : public Game {
 private:
     static constexpr std::uint8_t goalAreaSize = 4;
