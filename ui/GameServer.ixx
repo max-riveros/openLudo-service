@@ -18,6 +18,9 @@ export module UI.GameServer;
 import UI.IGameServer;
 import Game.Default;
 import Game;
+import Pawn;
+import Player;
+import Field;
 import Command;
 
 export std::string getAddressString(sockaddr_in addr);
