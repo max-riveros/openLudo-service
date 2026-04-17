@@ -124,16 +124,27 @@ void GameServer::listenClient(Client& client) const {
     std::println("Stopped listening to client {}...", getAddressString(client.address));
 }
 
-void GameServer::connectClient(const int id) {
+void GameServer::connectClient(int& id) {
     Client& client = getClient(id);
+    if (client.socket >= 0) return;
+
     sockaddr_in clientAddress{};
     socklen_t clientAddressLength = sizeof(clientAddress);
-    client.socket = accept(serverSocket, reinterpret_cast<sockaddr *>(&clientAddress), &clientAddressLength);
-
-    if (client.socket < 0) {
+    const int socket = accept(serverSocket, reinterpret_cast<sockaddr *>(&clientAddress), &clientAddressLength);
+    if (socket < 0) {
         std::perror("Accept failed");
         return;
     }
+
+    for (Client& otherClient : clients) {
+        if (otherClient.address.sin_addr.s_addr == clientAddress.sin_addr.s_addr && otherClient.address.sin_port == clientAddress.sin_port) {
+            std::println("Reconnected client!");
+            otherClient.socket = socket;
+            id--;
+            return;
+        }
+    }
+
     client.address = clientAddress;
     if (playerCount == 0) {
         client.host = true;

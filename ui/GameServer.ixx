@@ -43,7 +43,7 @@ private:
 protected:
     void handleMessage(const Client& client, const char buffer[INPUT_BUFFER_SIZE]) const override;
     void listenClient(Client& client) const override;
-    void connectClient(int id) override;
+    void connectClient(int& id) override;
     void addCommand(Command* command) override;
     void addCommands() override;
     void connectClients();

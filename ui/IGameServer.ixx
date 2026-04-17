@@ -53,7 +53,7 @@ export class IGameServer : public UI {
 protected:
     virtual void handleMessage(const Client& client, const char buffer[INPUT_BUFFER_SIZE]) const = 0;
     virtual void listenClient(Client& client) const = 0;
-    virtual void connectClient(int id) = 0;
+    virtual void connectClient(int& id) = 0;
     virtual void addCommand(Command* command) = 0;
     virtual void addCommands() = 0;
 public:
