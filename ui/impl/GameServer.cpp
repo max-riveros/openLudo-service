@@ -107,10 +107,14 @@ void GameServer::listenClient(Client& client) const {
         int bytes = recv(client.socket, buffer, sizeof(buffer), 0);
         if (bytes == 0) {
             std::println("Client {} disconnected!", clientString);
+            close(client.socket);
+            client.socket = -1;
             return;
         }
         if (bytes < 0) {
-            std::println("There was an error while recieving client data!");
+            std::println("There was an error while receiving client data!");
+            close(client.socket);
+            client.socket = -1;
             return;
         }
         std::println("Received {} bytes from {}!", bytes, clientString);

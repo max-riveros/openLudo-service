@@ -27,9 +27,12 @@ export struct Client {
     ~Client() {
         delete[] token;
     }
-    void sendMessage(const std::string& message) const {
+    void sendMessage(const std::string& message) {
         if (socket == -1) return;
-        send(socket, message.c_str(), message.length(), 0);
+        if (send(socket, message.c_str(), message.length(), 0) <= 1) {
+            close(socket);
+            socket = -1;
+        }
     }
 };
 
