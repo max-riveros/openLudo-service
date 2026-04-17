@@ -42,7 +42,7 @@ public:
             client.sendMessage("cmd=selectPawn;response=1"); // Invalid pawn
             return;
         }
-        if (std::to_string(client.playerId) != gameServer->getGame()->getTurn().getId()) {
+        if (client.player.getId() != gameServer->getGame()->getTurn().getId()) {
             client.sendMessage("cmd=selectPawn;response=2"); // Not clients turn
             return;
         }

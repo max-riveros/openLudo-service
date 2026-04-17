@@ -178,8 +178,7 @@ void GameServer::addCommands() {
 }
 
 void GameServer::onGameStart() {
-    std::string message = "event=gameStart;players=[";
-    for ()
+    const std::string message = "event=gameStart;players=[";
     broadcast(message);
 }
 void GameServer::onPlayerTurn(const Player& player) {

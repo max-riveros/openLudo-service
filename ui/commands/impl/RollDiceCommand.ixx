@@ -26,7 +26,7 @@ public:
     void exec(const int clientId, std::map<std::string, std::string> args) const override {
         if (!gameServer->getGame()) return;
         Client& client = gameServer->getClient(clientId);
-        if (std::to_string(client.playerId) != gameServer->getGame()->getTurn().getId()) {
+        if (client.player.getId() != gameServer->getGame()->getTurn().getId()) {
             client.sendMessage("cmd=rollDice;response=2"); // Not clients turn
             return;
         }
