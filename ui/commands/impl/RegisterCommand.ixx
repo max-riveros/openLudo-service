@@ -13,6 +13,8 @@ export module Command.Register;
 
 import Command;
 import UI.IGameServer;
+import Player.Default;
+import Pawn.Default;
 
 export class RegisterCommand : public Command {
     IGameServer* gameServer = nullptr;
@@ -26,11 +28,12 @@ public:
     }
     void exec(const int clientId, std::map<std::string, std::string> args) const override {
         Client& client = gameServer->getClient(clientId);
-        if (client.token == nullptr) {
-            char* token = new char[6];
-            std::strcpy(token, "00000");
-            client.token = token;
-            std::println("registered client ({})!", client.token);
-        }
+        if (client.token != nullptr) return;
+
+        char* token = new char[6];
+        std::strcpy(token, "00000");
+        client.token = token;
+
+        std::println("registered client ({})!", client.token);
     }
 };

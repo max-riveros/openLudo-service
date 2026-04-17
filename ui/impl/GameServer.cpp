@@ -142,7 +142,7 @@ void GameServer::connectClient(const int id) {
     std::println("Client {} addr {} connected at socket {}!", id, getAddressString(clientAddress), client.socket);
     playerCount++;
 
-    broadcast("event=clientConnect");
+    broadcast("event=clientConnect;id="+std::to_string(id));
 
     client.thread = std::thread(&GameServer::listenClient, this, std::ref(client));
 }
@@ -178,7 +178,9 @@ void GameServer::addCommands() {
 }
 
 void GameServer::onGameStart() {
-    broadcast("event=gameStart");
+    std::string message = "event=gameStart;players=[";
+    for ()
+    broadcast(message);
 }
 void GameServer::onPlayerTurn(const Player& player) {
     broadcast("event=playerTurn;player=" + player.getId());

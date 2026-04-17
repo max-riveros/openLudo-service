@@ -19,9 +19,9 @@ import UI.IGameServer;
 import Game.Default;
 import Game;
 import Pawn;
-import Player;
 import Field;
 import Command;
+import Player;
 
 export std::string getAddressString(sockaddr_in addr);
 
@@ -76,9 +76,8 @@ public:
     void initGame() override {
         std::string playerIds[getPlayerCount()];
         uint8_t playerIndex = 1;
-        for (Client& client : clients) {
+        for (const Client& client : clients) {
             if (client.clientId <= 0) continue;
-            client.playerId = client.clientId;
             playerIds[playerIndex] = std::to_string(client.clientId);
             playerIndex++;
         }

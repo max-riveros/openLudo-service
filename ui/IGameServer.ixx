@@ -14,15 +14,16 @@ export module UI.IGameServer;
 import UI;
 import Command;
 import Game;
+import Player;
 
 export struct Client {
+    Player player;
     sockaddr_in address;
     std::thread thread;
     char* token = nullptr;
     int socket = -1;
     bool host = false;
     uint8_t clientId = -1;
-    uint8_t playerId = -1;
 
     ~Client() {
         delete[] token;
