@@ -135,8 +135,15 @@ void GameServer::connectClient(const int id) {
         return;
     }
     client.address = clientAddress;
-    if (id == 0) {
+    if (playerCount == 0) {
         client.host = true;
+        client.color = RED;
+    } else if (playerCount == 1) {
+        client.color = BLUE;
+    } else if (playerCount == 2) {
+        client.color = YELLOW;
+    } else {
+        client.color = GREEN;
     }
     client.clientId = id;
     std::println("Client {} addr {} connected at socket {}!", id, getAddressString(clientAddress), client.socket);
@@ -178,7 +185,7 @@ void GameServer::addCommands() {
 }
 
 void GameServer::onGameStart() {
-    const std::string message = "event=gameStart;players=[";
+    const std::string message = "event=gameStart;players="+playerCount;
     broadcast(message);
 }
 void GameServer::onPlayerTurn(const Player& player) {

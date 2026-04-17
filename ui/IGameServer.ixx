@@ -14,14 +14,14 @@ export module UI.IGameServer;
 import UI;
 import Command;
 import Game;
-import Player;
+import Pawn;
 
 export struct Client {
-    Player player;
     sockaddr_in address;
     std::thread thread;
     char* token = nullptr;
     int socket = -1;
+    Color color;
     bool host = false;
     uint8_t clientId = -1;
 
