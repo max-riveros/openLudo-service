@@ -35,10 +35,11 @@ export struct Client {
 
         while (total < len) {
             const size_t substrSize = len - total;
-            const size_t sent = send(socket, message.substr(total, substrSize).c_str(), substrSize, 0);
+            const ssize_t sent = send(socket, message.substr(total, substrSize).c_str(), substrSize, 0);
             if (sent <= 0) {
                 close(socket);
                 socket = -1;
+                break;
             }
             total += sent;
         }

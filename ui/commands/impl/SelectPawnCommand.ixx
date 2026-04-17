@@ -36,6 +36,7 @@ public:
         return "selectPawn";
     }
     void exec(const int clientId, std::map<std::string, std::string> args) const override {
+        if (!gameServer->getGame()) return;
         Client& client = gameServer->getClient(clientId);
         if (!args.contains("pawn") || !isPositiveInt(args["pawn"])) {
             client.sendMessage("cmd=selectPawn;response=1"); // Invalid pawn
