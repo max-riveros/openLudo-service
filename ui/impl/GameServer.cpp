@@ -189,6 +189,8 @@ void GameServer::onGameStart() {
         std::string message = "event=playerSetup";
         message += ";id="+player.getId();
         message += ";color="+std::to_string(player.getColor());
+        message += ";startPosition="+std::to_string(player.getPawns().back().getStartPosition());
+        message += ";endPosition="+std::to_string(player.getPawns().back().getEndPosition());
         message += ";pawns=";
         for (const Pawn& pawn : player.getPawns()) {
             message += std::to_string(pawn.getId()) + ",";
