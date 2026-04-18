@@ -39,6 +39,12 @@ void bindTo(const int serverSocket, const in_addr_t ip, const in_port_t port) {
     bindingAddress.sin_family = AF_INET;
     bindingAddress.sin_port = htons(port);
     bindingAddress.sin_addr.s_addr = ip;
+
+    int opt = 1;
+    if (setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        perror("setsockopt");
+        exit(EXIT_FAILURE);
+    }
     bind(serverSocket, reinterpret_cast<sockaddr *>(&bindingAddress), sizeof(bindingAddress));
     std::println("Binding to address {} at socket {}!", getAddressString(bindingAddress), serverSocket);
 }
@@ -209,7 +215,7 @@ void GameServer::onGameStart() {
         for (const Pawn& pawn : player.getPawns()) {
             message += std::to_string(pawn.getId()) + ",";
         }
-        broadcast(message);
+        broadcast(message.substr(0, message.length() - 1));
     }
     const std::string message = "event=gameStart;playerCount="+std::to_string(playerCount);
     broadcast(message);
