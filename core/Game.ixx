@@ -21,7 +21,7 @@ protected:
     std::vector<Player> players;
     uint8_t currentTurn = 0;
     uint8_t turnsLeft = 1;
-    uint8_t selectedPawn = 0;
+    int8_t selectedPawn = 0;
 
     explicit Game(UI* ui) {
         this->ui = ui;
@@ -69,7 +69,7 @@ public:
         return dice.getLastRoll();
     }
     virtual bool isPawnSelected() {
-        return selectedPawn != 0;
+        return selectedPawn != -1;
     }
     virtual bool isWaitingForSelection() {
         return !isPawnSelected() && dice.getLastRoll() != 0;
