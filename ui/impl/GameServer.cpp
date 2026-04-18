@@ -230,7 +230,11 @@ void GameServer::onDiceRolled(const uint8_t value) {
     broadcast("event=diceRolled;value=" + std::to_string(value));
 }
 void GameServer::onWaitingForSelect() {
-    broadcast("event=waitingForSelect");
+    std::string message = "event=waitingForSelect;pawns=";
+    for (const Pawn& pawn : getGame()->getPossiblePawns()) {
+        message += std::to_string(pawn.getId()) + ",";
+    }
+    broadcast(message.substr(0, message.length() - 1));
 }
 void GameServer::onSelected(const Pawn& pawn) {
     broadcast("event=selected;pawn=" + std::to_string(pawn.getId()));
