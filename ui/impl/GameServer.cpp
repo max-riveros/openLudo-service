@@ -243,7 +243,7 @@ void GameServer::onPawnSaved(const Pawn& pawn) {
     broadcast("event=pawnSaved;pawn=" + std::to_string(pawn.getId()));
 }
 void GameServer::onPawnMovedToGoalArea(const Pawn& pawn) {
-    broadcast("event=pawnMovedToGoalArea;pawn=" + std::to_string(pawn.getId()));
+    broadcast("event=pawnMovedToGoalArea;pawn=" + std::to_string(pawn.getId()) + ";position=" + std::to_string(pawn.getPosition()));
 }
 void GameServer::onPawnMoved(const Pawn& pawn, const Field& from, const Field& to) {
     broadcast("event=pawnMoved;pawn=" + std::to_string(pawn.getId()) + ";from=" + std::to_string(from.getPosition()) + ";to=" + std::to_string(to.getPosition()));
