@@ -140,11 +140,12 @@ void GameServer::connectClient(int& id) {
         if (otherClient.address.sin_addr.s_addr == clientAddress.sin_addr.s_addr && otherClient.address.sin_port == clientAddress.sin_port) {
             std::println("Reconnected client!");
             otherClient.socket = socket;
-            id--;
+            id = 0;
             return;
         }
     }
 
+    client.socket = socket;
     client.address = clientAddress;
     if (playerCount == 0) {
         client.host = true;
@@ -197,7 +198,9 @@ void GameServer::addCommands() {
 
 void GameServer::onGameStart() {
     for (const Player& player : getGame()->getPlayers()) {
-        std::string message = "event=playerSetup";
+        std::string message;
+        message.reserve(256);
+        message = "event=playerSetup";
         message += ";id="+player.getId();
         message += ";color="+std::to_string(player.getColor());
         message += ";startPosition="+std::to_string(player.getPawns().back().getStartPosition());
@@ -208,7 +211,7 @@ void GameServer::onGameStart() {
         }
         broadcast(message);
     }
-    const std::string message = "event=gameStart;playerCount="+playerCount;
+    const std::string message = "event=gameStart;playerCount="+std::to_string(playerCount);
     broadcast(message);
 }
 void GameServer::onPlayerTurn(const Player& player) {

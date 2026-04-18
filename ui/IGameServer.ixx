@@ -6,6 +6,8 @@ module;
 
 #include <netinet/in.h>
 #include <thread>
+#include <mutex>
+#include <print>
 
 #define TOKEN_SIZE 5;
 
@@ -17,13 +19,14 @@ import Game;
 import Pawn;
 
 export struct Client {
+    std::mutex sendMutex;
     sockaddr_in address;
     std::thread thread;
     char* token = nullptr;
     int socket = -1;
     Color color;
     bool host = false;
-    uint8_t clientId = -1;
+    int8_t clientId = -1;
 
     ~Client() {
         delete[] token;
@@ -31,12 +34,15 @@ export struct Client {
     void sendMessage(const std::string& message) {
         if (socket == -1) return;
 
+        std::lock_guard lock(sendMutex);
+
         size_t total = 0;
-        const size_t len = message.length();
+        std::string messageCopy = message;
+        messageCopy+="\n";
+        const size_t len = messageCopy.length();
 
         while (total < len) {
-            const size_t substrSize = len - total;
-            const ssize_t sent = send(socket, message.substr(total, substrSize).c_str(), substrSize, 0);
+            const ssize_t sent = send(socket, messageCopy.c_str() + total, len - total, 0);
             if (sent <= 0) {
                 close(socket);
                 socket = -1;

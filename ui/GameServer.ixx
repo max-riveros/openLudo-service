@@ -76,7 +76,7 @@ public:
     void initGame() override {
         std::map<std::string, Color> players;
         for (const Client& client : clients) {
-            if (client.clientId <= 0) continue;
+            if (client.clientId < 0) continue;
             players[std::to_string(client.clientId)] = client.color;
         }
         game = new DefaultGame(players, this);
@@ -98,6 +98,9 @@ public:
     void stop() const override {
         std::println("Stopping server...");
         *listening = false;
+        for (const Client& client : clients) {
+            if (client.socket >= 0) close(client.socket);
+        }
         close(serverSocket);
     }
 
